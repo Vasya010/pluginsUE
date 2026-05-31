@@ -1,9 +1,10 @@
 {
 	"FileVersion": 3,
 	"Version": 59,
-	"VersionName": "8.6.0-NGX310.6.0",
+	"VersionName": "8.6.0-NGX310.6.0-zonefall.2",
 	"FriendlyName": "Zonefall DLSS",
-	"Description": "NVIDIA DLSS Super Resolution, Ray Reconstruction и DLAA. Проект Zonefall Protocol (UE 5.8). Интеграция: Кузьменко Василий.",
+	"Description": "NVIDIA DLSS Super Resolution, Ray Reconstruction и DLAA. Патч zonefall-1: политика графики, ZONEFALL.md. UE 5.8. Интеграция: Кузьменко Василий.",
+	"DocsURL": "ZONEFALL.md",
 	"Category": "Rendering",
 	"CreatedBy": "Кузьменко Василий",
 	"CreatedByURL": "https://zonefall.dev",

@@ -30,6 +30,7 @@
 #endif
 #if UE_VERSION_AT_LEAST(5, 8, 0)
 #include <atomic>
+#include "HAL/CriticalSection.h"
 #endif
 
 #include "IFFXFrameInterpolation.h"
@@ -73,6 +74,9 @@ public:
 	IFFXFrameInterpolationCustomPresent* CreateCustomPresent(IFFXSharedBackend* Backend, uint32_t Flags, FIntPoint RenderSize, FIntPoint DisplaySize, FfxSwapchain RawSwapChain, FfxCommandQueue Queue, FfxApiSurfaceFormat Format, EFFXBackendAPI Api) final;
 	bool GetAverageFrameTimes(float& AvgTimeMs, float& AvgFPS) final;
 	void InvalidateRenderState();
+#if UE_VERSION_AT_LEAST(5, 8, 0)
+	void UpdateCachedGameViewportState(FViewport* Viewport, FRHIViewport* ViewportRHI = nullptr);
+#endif
 
 private:
 	struct FFXFrameInterpolationView
@@ -116,10 +120,11 @@ private:
 
 	static bool IsSafePresenterPointer(const FFXFrameInterpolationCustomPresent* Presenter);
 	bool IsKnownFrameInterpolationPresenter(const FFXFrameInterpolationCustomPresent* Presenter) const;
+	bool IsPresenterUsableOnRenderThread(const FFXFrameInterpolationCustomPresent* Presenter) const;
 	void ClearCachedGameViewportState();
-	void UpdateCachedGameViewportState(FViewport* Viewport, FRHIViewport* ViewportRHI = nullptr);
 	FRHIViewport* GetActiveGameViewportRHIRenderThread() const;
 	FFXFrameInterpolationCustomPresent* GetFrameInterpolationPresenterRenderThread() const;
 	FIntPoint GetCachedViewportSizeRenderThread() const;
+	mutable FCriticalSection SwapChainsLock;
 #endif
 };

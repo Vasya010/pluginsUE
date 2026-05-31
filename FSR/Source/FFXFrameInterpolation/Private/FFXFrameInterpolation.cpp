@@ -26,6 +26,7 @@
 #include "FFXFrameInterpolationSlate.h"
 #include "FFXFrameInterpolationCustomPresent.h"
 #include "FFXFSRSettings.h"
+#include "LogFFXFrameInterpolation.h"
 #include "FFXRDGBuilder.h"
 
 #include "PostProcess/PostProcessing.h"
@@ -199,7 +200,10 @@ inline void TransitionAndCopyTexture(FRHICommandList& RHICmdList, FRHITexture* S
 //------------------------------------------------------------------------------------------------------
 // Implementation for the Frame Interpolation.
 //------------------------------------------------------------------------------------------------------
+#include "ZonefallFFXCompat.h"
+
 #if UE_VERSION_AT_LEAST(5, 8, 0)
+// ZONEFALL_PATCH: invalidate cached viewport/presenter when FI CVars change (UE 5.8).
 static void FFXFIOnFrameInterpolationCVarChanged(IConsoleVariable*)
 {
 	if (FFXFrameInterpolationModule* Module = FModuleManager::GetModulePtr<FFXFrameInterpolationModule>(TEXT("FFXFrameInterpolation")))
@@ -246,11 +250,22 @@ FFXFrameInterpolation::FFXFrameInterpolation()
 	{
 		CVarFIAsync->SetOnChangedCallback(FIChangedDelegate);
 	}
+	if (IConsoleVariable* CVarFSREnabled = CVarEnableFSR.AsVariable())
+	{
+		CVarFSREnabled->SetOnChangedCallback(FIChangedDelegate);
+	}
 #endif
+	UE_LOG(LogFFXFI, Log, TEXT("[Zonefall] FSR FI patch %s - see FSR/ZONEFALL.md"), ZONEFALL_FSR_PATCH_VERSION);
 }
 
 FFXFrameInterpolation::~FFXFrameInterpolation()
 {
+	UGameViewportClient::OnViewportCreated().RemoveAll(this);
+	FCoreDelegates::OnPostEngineInit.RemoveAll(this);
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->OnBeginDraw().RemoveAll(this);
+	}
 	ViewExtension = nullptr;
 #if UE_VERSION_AT_LEAST(5, 8, 0)
 	ClearCachedGameViewportState();
@@ -258,6 +273,7 @@ FFXFrameInterpolation::~FFXFrameInterpolation()
 }
 
 #if UE_VERSION_AT_LEAST(5, 8, 0)
+// ZONEFALL_PATCH: UE 5.8 — safe viewport/presenter cache for render thread (no stale FViewportRHIRef).
 bool FFXFrameInterpolation::IsSafePresenterPointer(const FFXFrameInterpolationCustomPresent* Presenter)
 {
 	if (!Presenter)
@@ -278,6 +294,7 @@ bool FFXFrameInterpolation::IsKnownFrameInterpolationPresenter(const FFXFrameInt
 		return false;
 	}
 
+	FScopeLock Lock(&SwapChainsLock);
 	for (const TPair<FfxSwapchain, FFXFrameInterpolationCustomPresent*>& Pair : SwapChains)
 	{
 		if (Pair.Value == Presenter)
@@ -287,6 +304,28 @@ bool FFXFrameInterpolation::IsKnownFrameInterpolationPresenter(const FFXFrameInt
 	}
 
 	return false;
+}
+
+bool FFXFrameInterpolation::IsPresenterUsableOnRenderThread(const FFXFrameInterpolationCustomPresent* Presenter) const
+{
+	if (!IsSafePresenterPointer(Presenter))
+	{
+		return false;
+	}
+
+	FRHIViewport* const ViewportRHIPtr = Presenter->GetRHIViewport();
+	if (!ViewportRHIPtr || !ViewportRHIPtr->IsValid())
+	{
+		return false;
+	}
+
+	FRHIViewport* const CachedViewportRHIPtr = CachedGameViewportRHI.load(std::memory_order_acquire);
+	if (CachedViewportRHIPtr != nullptr && CachedViewportRHIPtr != ViewportRHIPtr)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void FFXFrameInterpolation::ClearCachedGameViewportState()
@@ -341,19 +380,8 @@ void FFXFrameInterpolation::UpdateCachedGameViewportState(FViewport* Viewport, F
 
 FRHIViewport* FFXFrameInterpolation::GetActiveGameViewportRHIRenderThread() const
 {
-	FFXFrameInterpolationCustomPresent* Presenter = GetFrameInterpolationPresenterRenderThread();
-	if (!Presenter)
-	{
-		return nullptr;
-	}
-
-	FRHIViewport* ViewportRHIPtr = Presenter->GetRHIViewport();
-	if (!ViewportRHIPtr || !ViewportRHIPtr->IsValid())
-	{
-		return nullptr;
-	}
-
-	return ViewportRHIPtr;
+	FFXFrameInterpolationCustomPresent* const Presenter = GetFrameInterpolationPresenterRenderThread();
+	return Presenter ? Presenter->GetRHIViewport() : nullptr;
 }
 
 void FFXFrameInterpolation::InvalidateRenderState()
@@ -381,8 +409,8 @@ void FFXFrameInterpolation::InvalidateRenderState()
 
 FFXFrameInterpolationCustomPresent* FFXFrameInterpolation::GetFrameInterpolationPresenterRenderThread() const
 {
-	FFXFrameInterpolationCustomPresent* Presenter = CachedFrameInterpolationPresenter.load(std::memory_order_acquire);
-	if (!IsSafePresenterPointer(Presenter))
+	FFXFrameInterpolationCustomPresent* const Presenter = CachedFrameInterpolationPresenter.load(std::memory_order_acquire);
+	if (!IsPresenterUsableOnRenderThread(Presenter))
 	{
 		return nullptr;
 	}
@@ -403,7 +431,16 @@ IFFXFrameInterpolationCustomPresent* FFXFrameInterpolation::CreateCustomPresent(
 	{
 		if (Result->InitSwapChain(Backend, Flags, RenderSize, DisplaySize, RawSwapChain, Queue, Format, Api))
 		{
-			SwapChains.Add(RawSwapChain, Result);
+			{
+				FScopeLock Lock(&SwapChainsLock);
+				SwapChains.Add(RawSwapChain, Result);
+			}
+#if UE_VERSION_AT_LEAST(5, 8, 0)
+			if (IsInGameThread() && GEngine && GEngine->GameViewport && GEngine->GameViewport->Viewport)
+			{
+				UpdateCachedGameViewportState(GEngine->GameViewport->Viewport);
+			}
+#endif
 		}
 	}
 	return Result;
@@ -419,7 +456,7 @@ bool FFXFrameInterpolation::GetAverageFrameTimes(float& AvgTimeMs, float& AvgFPS
 	auto Viewport = GameViewport ? GameViewport->Viewport : nullptr;
 	auto ViewportRHI = FFX_VIEWPORT_RHI(Viewport);
 	FFXFrameInterpolationCustomPresent* Presenter = ViewportRHI.IsValid() ? (FFXFrameInterpolationCustomPresent*)ViewportRHI->GetCustomPresent() : nullptr;
-	if (Presenter)
+	if (Presenter && IsKnownFrameInterpolationPresenter(Presenter))
 	{
 		if ((Presenter->GetMode() == EFFXFrameInterpolationPresentModeNative) || Presenter->GetUseFFXSwapchain())
 		{
@@ -459,11 +496,17 @@ void FFXFrameInterpolation::OnBeginDrawHandler()
 	}
 #endif
 
-	if (FFXIsGameViewportRHIReady() && (FFX_VIEWPORT_RHI(GEngine->GameViewport->Viewport)->GetCustomPresent() == nullptr))
+	if (GEngine && GEngine->GameViewport && GEngine->GameViewport->Viewport
+		&& FFXIsGameViewportRHIReady()
+		&& (FFX_VIEWPORT_RHI(GEngine->GameViewport->Viewport)->GetCustomPresent() == nullptr))
 	{
 		auto ViewportRHI = FFX_VIEWPORT_RHI(GEngine->GameViewport->Viewport);
 		void* NativeSwapChain = ViewportRHI->GetNativeSwapChain();
-		FFXFrameInterpolationCustomPresent** PresentHandler = SwapChains.Find(NativeSwapChain);
+		FFXFrameInterpolationCustomPresent** PresentHandler = nullptr;
+		{
+			FScopeLock Lock(&SwapChainsLock);
+			PresentHandler = SwapChains.Find(NativeSwapChain);
+		}
 		if (PresentHandler)
 		{
 			(*PresentHandler)->InitViewport(GEngine->GameViewport->Viewport, ViewportRHI);
@@ -553,8 +596,13 @@ void FFXFrameInterpolation::OnPostEngineInit()
 			}
 
 #if UE_VERSION_AT_LEAST(5, 8, 0)
-			FFXFrameInterpolationCustomPresent* Presenter = Self->CachedFrameInterpolationPresenter.load(std::memory_order_acquire);
+			FFXFrameInterpolationCustomPresent* const Presenter = Self->CachedFrameInterpolationPresenter.load(std::memory_order_acquire);
 			if (!Self->IsKnownFrameInterpolationPresenter(Presenter))
+			{
+				return;
+			}
+			FRHIViewport* const ViewportRHIPtr = Presenter->GetRHIViewport();
+			if (!ViewportRHIPtr || !ViewportRHIPtr->IsValid())
 			{
 				return;
 			}

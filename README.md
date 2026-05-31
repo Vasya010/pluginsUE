@@ -95,9 +95,10 @@
 | | |
 |---|---|
 | **Папка** | `DLSS/` |
-| **Версия** | 8.6.0-NGX310.6.0 |
+| **Версия** | 8.6.0-NGX310.6.0-zonefall.2 |
 | **Движок** | UE 5.8.0 |
 | **Автор** | NVIDIA · интеграция: Кузьменко Василий |
+| **Документация** | [DLSS/ZONEFALL.md](DLSS/ZONEFALL.md) |
 
 **Описание:** NVIDIA DLSS Super Resolution, Ray Reconstruction (RR) и DLAA для повышения производительности и качества картинки.
 
@@ -105,7 +106,8 @@
 - DLSS Quality/Performance/Balanced, DLAA
 - Модули NGX для D3D11/D3D12/Vulkan
 - Настройки в Project Settings и CVars (`r.NGX.*`)
-- В Zonefall Protocol — **основной** апскейлер (включён в `DefaultEngine.ini`)
+- Патч **zonefall-2**: авто-разрешение конфликта FI+DLSS-G, `Config/ZonefallDLSSRecommended.ini`
+- В Zonefall Protocol — **основной** апскейлер
 
 **Требования:** NVIDIA GPU с поддержкой NGX, DX12, Win64.
 
@@ -116,17 +118,19 @@
 | | |
 |---|---|
 | **Папка** | `FSR/` |
-| **Версия** | 4.0.4 |
+| **Версия** | 4.0.4-zonefall.2 |
 | **Движок** | UE 5.8.0 |
 | **Автор** | AMD · интеграция: Кузьменко Василий |
+| **Документация** | [FSR/ZONEFALL.md](FSR/ZONEFALL.md) |
 
 **Описание:** AMD FidelityFX Super Resolution (пространственный/временной апскейл) и FidelityFX Frame Interpolation (генерация кадров).
 
 **Возможности:**
 - FSR 3/4 temporal upscaling, настройки качества и резкости
-- Frame Interpolation (отдельный CVar `r.FidelityFX.FI.Enabled`)
+- Frame Interpolation (`r.FidelityFX.FI.Enabled`); патч **zonefall-2** — стабильность viewport/swap-chain на UE 5.8
 - D3D12 backend, optical flow, shared RHI
-- **Важно:** не включать FSR FI одновременно с NVIDIA DLSS-G — конфликт swap chain / present
+- `Config/ZonefallFSRRecommended.ini` — FI выключен по умолчанию для Zonefall
+- **Важно:** не включать FSR FI одновременно с NVIDIA DLSS-G
 
 **Требования:** Win64, DX12 (для полного набора функций).
 

@@ -20,6 +20,9 @@
 // THE SOFTWARE.
 
 #include "FFXFrameInterpolationCustomPresent.h"
+#include "FFXFrameInterpolation.h"
+#include "FFXFrameInterpolationModule.h"
+#include "Modules/ModuleManager.h"
 #include "RenderTargetPool.h"
 #include "FFXFSRSettings.h"
 #include "GlobalShader.h"
@@ -231,9 +234,26 @@ FFXFrameInterpolationCustomPresent::~FFXFrameInterpolationCustomPresent()
 
 void FFXFrameInterpolationCustomPresent::InitViewport(FViewport* InViewport, FViewportRHIRef ViewportRHI)
 {
+	if (!InViewport || !ViewportRHI.IsValid())
+	{
+		return;
+	}
+
 	Viewport = InViewport;
-    RHIViewport = ViewportRHI;
-	RHIViewport->SetCustomPresent(this);
+	RHIViewport = ViewportRHI.GetReference();
+	ViewportRHI->SetCustomPresent(this);
+
+	// ZONEFALL_PATCH: refresh game-thread cache after binding custom present.
+	if (IsInGameThread())
+	{
+		if (FFXFrameInterpolationModule* Module = FModuleManager::GetModulePtr<FFXFrameInterpolationModule>(TEXT("FFXFrameInterpolation")))
+		{
+			if (IFFXFrameInterpolation* Impl = Module->GetImpl())
+			{
+				static_cast<FFXFrameInterpolation*>(Impl)->UpdateCachedGameViewportState(InViewport, RHIViewport);
+			}
+		}
+	}
 }
 
 bool FFXFrameInterpolationCustomPresent::InitSwapChain(IFFXSharedBackend* InBackend, uint32_t Flags, FIntPoint RenderSize, FIntPoint DisplaySize, FfxSwapchain RawSwapChain, FfxCommandQueue Queue, FfxApiSurfaceFormat Format, EFFXBackendAPI InApi)
@@ -261,19 +281,41 @@ void FFXFrameInterpolationCustomPresent::OnBackBufferResize()
 {
 	bResized = true;
 
-	ENQUEUE_RENDER_COMMAND(FFXFrameInterpolationCustomPresentOnBackBufferResize)(
-	[this](FRHICommandListImmediate& RHICmdList)
+	// ZONEFALL_PATCH: drop stale viewport cache after swap-chain resize.
+	if (FFXFrameInterpolationModule* Module = FModuleManager::GetModulePtr<FFXFrameInterpolationModule>(TEXT("FFXFrameInterpolation")))
 	{
-		RHICmdList.EnqueueLambda([this](FRHICommandListImmediate& cmd) mutable
+		if (IFFXFrameInterpolation* Impl = Module->GetImpl())
 		{
+			static_cast<FFXFrameInterpolation*>(Impl)->InvalidateRenderState();
+		}
+	}
+
+	if (!RHIViewport || !RHIViewport->IsValid() || !Backend)
+	{
+		return;
+	}
+
+	FRHIViewport* const ViewportRHICopy = RHIViewport;
+	IFFXSharedBackend* const BackendCopy = Backend;
+
+	ENQUEUE_RENDER_COMMAND(FFXFrameInterpolationCustomPresentOnBackBufferResize)(
+	[ViewportRHICopy, BackendCopy, this](FRHICommandListImmediate& RHICmdList)
+	{
+		RHICmdList.EnqueueLambda([ViewportRHICopy, BackendCopy, this](FRHICommandListImmediate& cmd) mutable
+		{
+			if (!ViewportRHICopy || !ViewportRHICopy->IsValid() || !BackendCopy)
+			{
+				return;
+			}
+
 			ffxConfigureDescFrameGeneration ConfigDesc;
 			FMemory::Memzero(ConfigDesc);
 			ConfigDesc.header.type = FFX_API_CONFIGURE_DESC_TYPE_FRAMEGENERATION;
-			ConfigDesc.swapChain = Backend->GetSwapchain(RHIViewport->GetNativeSwapChain());
+			ConfigDesc.swapChain = BackendCopy->GetSwapchain(ViewportRHICopy->GetNativeSwapChain());
 			ConfigDesc.frameGenerationEnabled = false;
 			ConfigDesc.allowAsyncWorkloads = false;
 
-			Backend->UpdateSwapChain(GetContext(), ConfigDesc);
+			BackendCopy->UpdateSwapChain(GetContext(), ConfigDesc);
 		});
 	});
 
@@ -556,7 +598,24 @@ void FFXFrameInterpolationCustomPresent::SetMode(EFFXFrameInterpolationPresentMo
 
 void FFXFrameInterpolationCustomPresent::SetEnabled(bool const bInEnabled)
 {
+	if (bEnabled == bInEnabled)
+	{
+		return;
+	}
+
 	bEnabled = bInEnabled;
+
+	// ZONEFALL_PATCH: toggling FI must not leave stale RT viewport handles.
+	if (!bInEnabled)
+	{
+		if (FFXFrameInterpolationModule* Module = FModuleManager::GetModulePtr<FFXFrameInterpolationModule>(TEXT("FFXFrameInterpolation")))
+		{
+			if (IFFXFrameInterpolation* Impl = Module->GetImpl())
+			{
+				static_cast<FFXFrameInterpolation*>(Impl)->InvalidateRenderState();
+			}
+		}
+	}
 }
 
 void FFXFrameInterpolationCustomPresent::SetCustomPresentStatus(FFXFrameInterpolationCustomPresentStatus Flag)

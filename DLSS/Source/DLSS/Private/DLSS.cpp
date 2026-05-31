@@ -31,6 +31,7 @@
 #include "Misc/MessageDialog.h"
 
 #include "DLSSUpscalerModularFeature.h"
+#include "ZonefallDLSSCompat.h"
 
 
 #define LOCTEXT_NAMESPACE "FDLSSModule"
@@ -149,6 +150,7 @@ public:
 void FDLSSModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+	ZonefallDLSSCompat::Register();
 	UE_LOG(LogDLSS, Log, TEXT("%s Enter"), ANSI_TO_TCHAR(__FUNCTION__));
 
 	if (!GDynamicRHI)

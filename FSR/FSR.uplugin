@@ -1,9 +1,10 @@
 {
 	"FileVersion": 3,
 	"Version": 2,
-	"VersionName": "4.0.4",
+	"VersionName": "4.0.4-zonefall.2",
 	"FriendlyName": "Zonefall FSR",
-	"Description": "AMD FidelityFX Super Resolution и Frame Interpolation. Проект Zonefall Protocol (UE 5.8). Интеграция: Кузьменко Василий.",
+	"Description": "AMD FSR + Frame Interpolation. Патч zonefall-1: стабильность FI на UE 5.8, ZONEFALL.md. Интеграция: Кузьменко Василий.",
+	"DocsURL": "ZONEFALL.md",
 	"Category": "Rendering",
 	"CreatedBy": "Кузьменко Василий",
 	"CreatedByURL": "https://zonefall.dev",
