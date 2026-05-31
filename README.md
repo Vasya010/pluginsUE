@@ -22,6 +22,8 @@
 
 Артефакты сборки (`Binaries/`, `Intermediate/`, `UIWorld/_BuildOutput/` и т.п.) исключены через `.gitignore`.
 
+Три крупных текстуры Sky Creator (>50 MB) хранятся через **Git LFS** (см. `.gitattributes`). После клонирования: `git lfs install` и `git lfs pull`.
+
 ---
 
 ## Zonefall — собственные и интеграция
