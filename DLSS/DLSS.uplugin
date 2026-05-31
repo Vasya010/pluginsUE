@@ -1,0 +1,121 @@
+{
+	"FileVersion": 3,
+	"Version": 59,
+	"VersionName": "8.6.0-NGX310.6.0",
+	"FriendlyName": "Zonefall DLSS",
+	"Description": "NVIDIA DLSS Super Resolution, Ray Reconstruction и DLAA. Проект Zonefall Protocol (UE 5.8). Интеграция: Кузьменко Василий.",
+	"Category": "Rendering",
+	"CreatedBy": "Кузьменко Василий",
+	"CreatedByURL": "https://zonefall.dev",
+	"Icon": "Resources/Icon128.png",
+	"DocsURL": "",
+	"MarketplaceURL": "https://www.unrealengine.com/marketplace/en-US/product/nvidia-dlss",
+	"SupportURL": "mailto:DLSS-Support@nvidia.com",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "DLSSUtility",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit",
+			"PlatformAllowList": [
+				"Win64"
+			],
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		},
+		{
+			"Name": "DLSS",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64"
+			],
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		},
+		{
+			"Name": "DLSSBlueprint",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit",
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		},
+		{
+			"Name": "NGXRHI",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64"
+			],
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		},
+		{
+			"Name": "NGXD3D11RHI",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64"
+			],
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		},
+		{
+			"Name": "NGXD3D12RHI",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64"
+			],
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		},
+		{
+			"Name": "NGXVulkanRHIPreInit",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit",
+			"PlatformAllowList": [
+				"Win64"
+			],
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		},
+		{
+			"Name": "NGXVulkanRHI",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64"
+			],
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		},
+		{
+			"Name": "DLSSEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64"
+			],
+			"PlatformArchitectureDenyList": [
+				"Win64:arm64"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "StreamlineNGXCommon",
+			"Enabled": true
+		}
+	]
+}

@@ -1,0 +1,38 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "JakubAnimNodes",
+	"Description": "Кастомные ноды AnimGraph: layering, curve smoother, pose snapshot. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "Other",
+	"CreatedBy": "JakubW",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "JakubAnimNodesTool",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Linux"
+			]
+		},
+		{
+			"Name": "JakubAnimNodes",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "PreDefault",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Linux"
+			]
+		}
+	]
+}

@@ -1,0 +1,51 @@
+{
+	"FileVersion": 3,
+	"Version": 2,
+	"VersionName": "1.1.0",
+	"FriendlyName": "UIWorld",
+	"Description": "Меню, загрузка, настройки, сохранения, локализация и онлайн-лобби (LAN + Steam). Game Instance и готовые UMG-виджеты. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "Gameplay",
+	"CreatedBy": "Кузьменко Василий",
+	"CreatedByURL": "https://zonefall.dev",
+	"DocsURL": "https://zonefall.dev/docs/uiworld",
+	"SupportURL": "https://zonefall.dev/support",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"EnabledByDefault": true,
+	"Plugins": [
+		{ "Name": "EnhancedInput", "Enabled": true },
+		{ "Name": "ClimbingNavigation", "Enabled": false },
+		{ "Name": "CombatCore", "Enabled": false },
+		{ "Name": "OnlineSubsystem", "Enabled": true },
+		{ "Name": "OnlineSubsystemNull", "Enabled": true },
+		{ "Name": "OnlineSubsystemUtils", "Enabled": true },
+		{ "Name": "OnlineSubsystemSteam", "Enabled": true },
+		{ "Name": "DLSS", "Enabled": false },
+		{ "Name": "DLSSMoviePipelineSupport", "Enabled": false },
+		{ "Name": "NIS", "Enabled": false },
+		{ "Name": "Streamline", "Enabled": false },
+		{ "Name": "StreamlineCore", "Enabled": false },
+		{ "Name": "StreamlineNGXCommon", "Enabled": false },
+		{ "Name": "StreamlineDLSSG", "Enabled": false },
+		{ "Name": "StreamlineReflex", "Enabled": false },
+		{ "Name": "StreamlineDeepDVC", "Enabled": false },
+		{ "Name": "FSR", "Enabled": false },
+		{ "Name": "FSRMovieRenderPipeline", "Enabled": false },
+		{ "Name": "GraphDebbuger", "Enabled": false },
+		{ "Name": "HelpfulFunctions", "Enabled": false },
+		{ "Name": "IWALS_AbilitySystem", "Enabled": false },
+		{ "Name": "JakubAnimNodes", "Enabled": false },
+		{ "Name": "JakubCableComponent", "Enabled": false },
+		{ "Name": "SkyCreatorPlugin", "Enabled": false }
+	],
+	"Modules": [
+		{
+			"Name": "UIWorld",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

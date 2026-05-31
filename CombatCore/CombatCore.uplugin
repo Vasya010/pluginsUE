@@ -1,0 +1,30 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "CombatCore",
+	"Description": "Боевая система AGLS: анимации ударов, реакции, GameplayTask, редактор combat setup. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "Gameplay",
+	"CreatedBy": "JakubW",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "CombatCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "CombatCoreEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PreDefault"
+		}
+	]
+}

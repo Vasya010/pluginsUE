@@ -1,0 +1,55 @@
+{
+	"FileVersion": 3,
+	"Version": 24,
+	"VersionName": "1.40.2",
+	"FriendlyName": "Sky Creator",
+	"Description": "Динамическое небо, volumetric-облака, время суток и погодные эффекты. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "Rendering",
+	"CreatedBy": "Dmitry Karpukhin",
+	"CreatedByURL": "com.epicgames.launcher://ue/marketplace/profile/Dmitry+Karpukhin",
+	"DocsURL": "https://dmkarpukhin.com/sky-creator-plugin/documentation/",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/b9aa540db8c54f7d928c61d3b30cb955",
+	"SupportURL": "mailto:skxdoom@gmail.com",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "SkyCreatorPlugin",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [
+				"Win64",
+				"Mac",
+				"Linux"
+			],
+			"AdditionalDependencies": [
+				"Niagara"
+			]
+		},
+		{
+			"Name": "SkyCreatorShaders",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit",
+			"PlatformAllowList": [
+				"Win64",
+				"Mac",
+				"Linux"
+			]
+		},
+		{
+			"Name": "SkyCreatorEditorPlugin",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit",
+			"AdditionalDependencies": [
+				"UnrealEd"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "Niagara",
+			"Enabled": true
+		}
+	]
+}

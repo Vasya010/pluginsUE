@@ -1,0 +1,25 @@
+# Unreal Engine — артефакты сборки (не публиковать)
+**/Binaries/
+**/Intermediate/
+**/DerivedDataCache/
+**/Saved/
+**/_BuildOutput/
+**/Build/
+
+# IDE / ОС
+.vs/
+.vscode/
+*.sln
+*.suo
+*.user
+*.userosscache
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Вложенные git-репозитории (например, в _BuildOutput)
+**/.git/

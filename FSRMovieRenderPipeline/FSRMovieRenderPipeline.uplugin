@@ -1,0 +1,40 @@
+{
+	"FileVersion": 3,
+	"Version": 2,
+	"VersionName": "4.0.4",
+	"FriendlyName": "Zonefall FSR Movie Render",
+	"Description": "FSR upscaling для Movie Render Pipeline. Проект Zonefall Protocol (UE 5.8). Интеграция: Кузьменко Василий.",
+	"Category": "Rendering",
+	"CreatedBy": "Кузьменко Василий",
+	"CreatedByURL": "https://zonefall.dev",
+	"Icon": "Resources/Icon128.png",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"SupportedTargetPlatforms": [
+		"Win64"
+	],
+	"Modules": [
+		{
+			"Name": "FSRMovieRenderPipeline",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "MovieRenderPipeline",
+			"Enabled": true
+		},
+		{
+			"Name": "FSR",
+			"Enabled": true
+		}
+	]
+}

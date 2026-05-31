@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"Version": 127,
+	"VersionName": "8.6.0",
+	"FriendlyName": "NVIDIA NGX/Streamline Common",
+	"Description": "Общие зависимости NVIDIA NGX/Streamline. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "Rendering",
+	"CreatedBy": "NVIDIA",
+	"CreatedByURL": "https://developer.nvidia.com/rtx/streamline",
+	"DocsURL": "",
+	"MarketplaceURL": "https://www.unrealengine.com/marketplace/en-US/product/nvidia-dlss",
+	"SupportURL": "mailto:DLSS-Support@nvidia.com",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "StreamlineNGXCommon",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

@@ -1,0 +1,34 @@
+{
+	"FileVersion": 3,
+	"Version": 131,
+	"VersionName": "8.6.0-SL2.11.1",
+	"FriendlyName": "NVIDIA Streamline (deprecated)",
+	"Description": "Совместимость со старыми версиями Streamline. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "Rendering",
+	"CreatedBy": "NVIDIA",
+	"CreatedByURL": "https://developer.nvidia.com/rtx/streamline",
+	"DocsURL": "",
+	"MarketplaceURL": "https://www.unrealengine.com/marketplace/en-US/product/nvidia-dlss",
+	"SupportURL": "mailto:DLSS-Support@nvidia.com",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": false,
+	"Installed": true,
+	"Plugins": [
+		{
+			"Name": "StreamlineCore",
+			"Enabled": true
+		},
+		{
+			"Name": "StreamlineDLSSG",
+			"Enabled": true
+		},
+		{
+			"Name": "StreamlineDeepDVC",
+			"Enabled": true
+		},
+		{
+			"Name": "StreamlineReflex",
+			"Enabled": true
+		}
+	]
+}

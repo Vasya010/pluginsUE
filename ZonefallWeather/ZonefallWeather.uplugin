@@ -1,0 +1,31 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0.0",
+	"FriendlyName": "Zonefall Weather",
+	"Description": "Суточный цикл и динамическая погода: солнце, луна, атмосфера, облака, туман, молнии. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "Environment",
+	"CreatedBy": "Zonefall",
+	"CreatedByURL": "https://zonefall.dev",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ZonefallWeather",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "Niagara",
+			"Enabled": true
+		}
+	]
+}

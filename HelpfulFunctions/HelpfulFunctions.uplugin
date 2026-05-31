@@ -1,0 +1,47 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "2.0",
+	"FriendlyName": "AGLS Core",
+	"Description": "AGLS Core: Blueprint/C++ locomotion — персонажи, climbing, traversal, IK, AI-хелперы. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "Blueprints",
+	"CreatedBy": "JakubW",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "HelpfulFunctions",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "JakubCableComponent",
+			"Enabled": true
+		},
+		{
+			"Name": "StateTree",
+			"Enabled": true
+		},
+		{
+			"Name": "PoseSearch",
+			"Enabled": true
+		},
+		{
+			"Name": "GameplayStateTree",
+			"Enabled": true
+		},
+		{
+			"Name": "CombatCore",
+			"Enabled": true
+		}
+	]
+}

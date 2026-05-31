@@ -1,0 +1,35 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Advanced AI Logic",
+	"Description": "Навигация для лазания (ClimbNav), NavLinks, EnvQuery и улучшенное AI-восприятие для AGLS. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "AI",
+	"CreatedBy": "JakubW",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ClimbingNavigation",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "MotionWarping",
+			"Enabled": true
+		},
+		{
+			"Name": "GraphDebbuger",
+			"Enabled": true
+		}
+	]
+}

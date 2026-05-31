@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Top -->
+  <circle cx="8" cy="3" r="1.1" fill="#7a7a7a"/>
+  <rect x="7.6" y="4" width="0.8" height="1.6" rx="0.4" fill="#7a7a7a"/>
+
+  <!-- Upper left/right -->
+  <circle cx="4" cy="5" r="1.1" fill="#8c8c8c"/>
+  <circle cx="12" cy="5" r="1.1" fill="#8c8c8c"/>
+
+  <!-- Head -->
+  <circle cx="8" cy="8" r="1.8" fill="#5a5a5a"/>
+
+  <!-- Body -->
+  <rect x="5.5" y="10" width="5" height="3.5" rx="1.2" fill="#5a5a5a"/>
+
+</svg>

@@ -1,0 +1,37 @@
+{
+	"FileVersion": 3,
+	"Version": 33,
+	"VersionName": "8.6.0",
+	"FriendlyName": "Zonefall DLSS Movie Render",
+	"Description": "DLSS/DLAA для Movie Render Queue. Проект Zonefall Protocol (UE 5.8). Интеграция: Кузьменко Василий.",
+	"Category": "Rendering",
+	"CreatedBy": "Кузьменко Василий",
+	"CreatedByURL": "https://zonefall.dev",
+	"Icon": "Resources/Icon128.png",
+	"DocsURL": "",
+	"MarketplaceURL": "https://www.unrealengine.com/marketplace/en-US/product/nvidia-dlss",
+	"SupportURL": "mailto:DLSS-Support@nvidia.com",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "DLSSMoviePipelineSupport",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "MovieRenderPipeline",
+			"Enabled": true
+		},
+		{
+			"Name": "DLSS",
+			"Enabled": true
+		}
+	]
+}

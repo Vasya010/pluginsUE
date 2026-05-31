@@ -1,0 +1,73 @@
+{
+	"FileVersion": 3,
+	"Version": 2,
+	"VersionName": "4.0.4",
+	"FriendlyName": "Zonefall FSR",
+	"Description": "AMD FidelityFX Super Resolution и Frame Interpolation. Проект Zonefall Protocol (UE 5.8). Интеграция: Кузьменко Василий.",
+	"Category": "Rendering",
+	"CreatedBy": "Кузьменко Василий",
+	"CreatedByURL": "https://zonefall.dev",
+	"Icon": "Resources/Icon128.png",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"SupportedTargetPlatforms": [
+		"Win64"
+	],
+	"Modules": [
+		{
+			"Name": "FFXShared",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
+		},
+		{
+			"Name": "FFXFSRApi",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
+		},
+		{
+			"Name": "FFXOpticalFlowApi",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
+		},
+		{
+			"Name": "FFXFrameInterpolationApi",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
+		},
+		{
+			"Name": "FFXD3D12",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit",
+			"PlatformAllowList": [
+				"Win64"
+			]
+		},
+		{
+			"Name": "FFXD3D12Backend",
+			"Type": "Runtime",
+			"LoadingPhase": "PostSplashScreen",
+			"PlatformAllowList": [
+				"Win64"
+			]
+		},
+		{
+			"Name": "FFXFSRTemporalUpscaling",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
+		},
+		{
+			"Name": "FFXFrameInterpolation",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
+		},
+		{
+			"Name": "FFXFSRSettings",
+			"Type": "Runtime",
+			"LoadingPhase": "EarliestPossible"
+		}
+	]
+}

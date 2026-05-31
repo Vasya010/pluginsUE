@@ -1,0 +1,25 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0.0",
+	"FriendlyName": "Zonefall AI",
+	"Description": "C++ AI: Behavior Tree, Blackboard, восприятие, патруль, тактика, отряды и умное перемещение. Проект Zonefall Protocol (UE 5.8).",
+	"Category": "AI",
+	"CreatedBy": "Zonefall",
+	"CreatedByURL": "https://zonefall.dev",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ZonefallAI",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
